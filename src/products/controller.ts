@@ -1,8 +1,8 @@
-import { BadRequestException, Controller, Get, InternalServerErrorException, Req } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { ProductsService } from 'src/products/service';
-import { DEFAULT_FETCH_LIMIT, INTERNAL_SERVER_ERROR_MESSAGE } from 'src/utils/constants';
-import { successResponse } from 'src/utils/formatResponses';
+import { DEFAULT_FETCH_LIMIT } from 'src/utils/constants';
+import { failureResponse, successResponse } from 'src/utils/formatResponses';
 import { Public } from 'src/utils/publicRoutes';
 import { ControllerReturnType } from 'src/utils/types';
 
@@ -29,11 +29,7 @@ export class ProductsController {
       return successResponse(data, "Products fetched", 200, true);
     } catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
   }
 }
