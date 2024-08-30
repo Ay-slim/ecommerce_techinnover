@@ -38,7 +38,7 @@ export class ProductsService {
       page, limit
     } = paginationDto;
     const startIdx = (page - 1) * limit;
-    return this.productModel.find(filter, "name description qty price _id media_urls").skip(startIdx).limit(limit);
+    return this.productModel.find(filter, "name description qty price _id media_urls approved").skip(startIdx).limit(limit);
   }
 
   async userUpdate(filter: {_id: string; user_id: string}, updateProductDto: UpdateProductDto): Promise<Product> {
