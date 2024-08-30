@@ -7,10 +7,10 @@ export type PaginationDto = {
   limit: number;
 }
 
-export type MixedSchemaTypes = User | Product | Product[];
+export type MixedSchemaTypes = User | User[] | Product | Product[];
 
 export type ControllerReturnType = {
-  data: MixedSchemaTypes;
+  data: User | User[] | Product | Product[] | {name: string};
   success: boolean;
   message: string;
   statusCode: HttpStatus
