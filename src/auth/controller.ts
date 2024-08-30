@@ -41,7 +41,6 @@ export class AuthController {
       });
       return successResponse(userDetails, "User created", 201, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }
@@ -66,7 +65,6 @@ export class AuthController {
       });
       return successResponse(userDetails, "Logged in", 201, true)
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
     
@@ -78,7 +76,6 @@ export class AuthController {
       res.clearCookie('tokens');
       return successResponse(null, "Logged out", 200, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }

@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, InternalServerErrorException } from "@nestjs/common";
+import { HttpStatus, InternalServerErrorException } from "@nestjs/common";
 import { Product } from "src/products/interface";
 import { User } from "src/users/interface";
 import { INTERNAL_SERVER_ERROR_MESSAGE } from "./constants";
@@ -22,6 +22,7 @@ export const failureResponse = (
     message: string;
   },
 ) => {
+  console.log(e);
   if (e?.message?.startsWith("Error: ")) {
     throw e;
   } else {

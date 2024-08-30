@@ -37,7 +37,6 @@ export class ProductsController {
       });
       return successResponse(data, "Products fetched", 200, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }

@@ -57,7 +57,6 @@ export class AdminController {
       });
       return successResponse(adminDetails, "Admin created", 201, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }
@@ -86,7 +85,6 @@ export class AdminController {
       }, usersFilter);
       return successResponse(data, "Users fetched", 200, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }
@@ -111,7 +109,6 @@ export class AdminController {
       delete data["password"]
       return successResponse({name: data.name}, `User ${decision === 'ban' ? 'banned': 'unbanned'}`, 201, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }
@@ -140,7 +137,6 @@ export class AdminController {
       }, productsFilter);
       return successResponse(data, "Products fetched", 200, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }
@@ -167,7 +163,6 @@ export class AdminController {
       }
       return successResponse(data, `Product ${decision === 'approve' ? 'approved' : 'rejected'}`, 201, true);
     } catch (e) {
-      console.log(e);
       failureResponse(e);
     }
   }
