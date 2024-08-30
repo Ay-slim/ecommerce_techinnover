@@ -23,7 +23,7 @@ export const failureResponse = (
   },
 ) => {
   if (e?.message?.startsWith("Error: ")) {
-    throw new BadRequestException(e?.message);
+    throw e;
   } else {
     throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
   }
