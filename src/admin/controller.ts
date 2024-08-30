@@ -1,12 +1,14 @@
 import { Body, Controller, Post, Get, BadRequestException, UseGuards, Req, Patch } from '@nestjs/common';
 import { Request } from 'express';
 import { RegisterUserDto } from '../auth/types';
-import { DEFAULT_FETCH_LIMIT } from 'src/utils/constants';
+import { ALREADY_EXISTS_ERROR_MESSAGE, DEFAULT_FETCH_LIMIT } from 'src/utils/constants';
 import { AdminGuard, SuperAdminGuard } from './guard';
 import { UsersService } from 'src/users/service';
 import { ProductsService } from 'src/products/service';
 import { failureResponse, successResponse } from 'src/utils/formatResponses';
 import { ControllerReturnType } from 'src/utils/types';
+import { z } from 'zod';
+import { zodRequestValidation } from 'src/utils/zodValidation';
 // import { Public } from 'src/utils/publicRoutes';
 // import { AdminService } from './service';
 
@@ -32,18 +34,28 @@ export class AdminController {
     @Body() createUserDto: RegisterUserDto,
   ) {
     try {
+      const validator = z.object({
+        name: z.string(),
+        email: z.string(),
+        password: z.string(),
+      });
+      zodRequestValidation(validator, createUserDto)
       const {
         name,
         email,
         password
       } = createUserDto;
-      const userDetails = await this.userService.create({
+      const existingAdmin = await this.userService.findByEmail(email);
+      if (existingAdmin) {
+        throw new BadRequestException(ALREADY_EXISTS_ERROR_MESSAGE);
+      }
+      const adminDetails = await this.userService.create({
         name,
         email,
         password,
         role: "admin",
       });
-      return successResponse(userDetails, "Admin created", 201, true);
+      return successResponse(adminDetails, "Admin created", 201, true);
     } catch (e) {
       console.log(e);
       failureResponse(e);
@@ -59,9 +71,14 @@ export class AdminController {
         limit: rawLimit,
         filter,
       } = JSON.parse(JSON.stringify(request.query));
-      if (!['banned', 'active', 'all'].includes(filter)) {
-        throw new BadRequestException("Error: Filter must be banned, active, or all");
-      }
+      const validator = z.object({
+        rawPage: z.string(),
+        rawLimit: z.string(),
+        filter: z.enum(['banned', 'active', 'all']),
+      });
+      zodRequestValidation(validator, {
+        rawPage, rawLimit, filter,
+      });
       const usersFilter = filter === 'banned' ? { banned: true, role: 'user' } : filter === 'active' ? { banned: false, role: 'user' }: {role: 'user'};
       const data = await this.userService.findAll({
         page: Number(rawPage) || 1,
@@ -79,9 +96,13 @@ export class AdminController {
   async banOrUnbanUser(@Req() request: Request): Promise<ControllerReturnType> {
     try {
       const { _id, decision } = request.query;
-      if (!['ban', 'unban'].includes(decision as string)) {
-        throw new BadRequestException("Decision must be ban or unban");
-      }
+      const validator = z.object({
+        _id: z.string(),
+        decision: z.enum(['ban', 'unban']),
+      });
+      zodRequestValidation(validator, {
+        _id, decision,
+      });
       const decisionUpdate = decision === 'ban' ? { banned: true } : decision === 'unban' ? {banned: false} : { banned: null };
       const data = await this.userService.banOrUnban(_id as string, decisionUpdate);
       if (!data) {
@@ -104,15 +125,20 @@ export class AdminController {
         limit: rawLimit,
         filter,
       } = JSON.parse(JSON.stringify(request.query));
-      if (!['pending', 'approved', 'rejected'].includes(filter)) {
-        throw new BadRequestException("Error: Filter must be pending, approved, or rejected");
-      }
-      const productsFilter = filter === 'pending' ? { approved: null} : filter === 'approved' ? { approved: true } : { approved: false};
+      const validator = z.object({
+        rawPage: z.string(),
+        rawLimit: z.string(),
+        filter: z.enum(['pending', 'approved', 'rejected', 'all']),
+      });
+      zodRequestValidation(validator, {
+        rawPage, rawLimit, filter,
+      });
+      const productsFilter = filter === 'pending' ? { approved: null} : filter === 'approved' ? { approved: true } : filter === 'rejected' ? { approved: false} : {};
       const data = await this.productService.findAll({
         page: Number(rawPage) || 1,
         limit: Number(rawLimit) || DEFAULT_FETCH_LIMIT,
       }, productsFilter);
-      return successResponse(data, "Users fetched", 200, true);
+      return successResponse(data, "Products fetched", 200, true);
     } catch (e) {
       console.log(e);
       failureResponse(e);
@@ -124,6 +150,13 @@ export class AdminController {
   async approveOrRejectProduct(@Req() request: Request): Promise<ControllerReturnType> {
     try {
       const { _id, decision } = request.query;
+      const validator = z.object({
+        _id: z.string(),
+        decision: z.enum(['approve', 'reject']),
+      });
+      zodRequestValidation(validator, {
+        _id, decision,
+      });
       if (!['approve', 'reject'].includes(decision as string)) {
         throw new BadRequestException("Error: Decision must be approve or reject");
       }
