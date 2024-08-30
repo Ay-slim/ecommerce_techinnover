@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthTokenDto, RegisterUserDto, UserAuthDto } from './types';
 import { LoginUserDto } from './types';
 import { UsersService } from '../users/service';
-import { LOGIN_ERROR_MESSAGE } from 'src/utils/constants';
+import { BANNED_USER_ERROR_MESSAGE, LOGIN_ERROR_MESSAGE } from 'src/utils/constants';
 
 @Injectable()
 export class AuthService {
@@ -51,7 +51,7 @@ export class AuthService {
     }
     if (user.banned) {
       console.log('Banned user');
-      throw new UnauthorizedException(LOGIN_ERROR_MESSAGE);
+      throw new ForbiddenException(BANNED_USER_ERROR_MESSAGE);
     }
     const isValidPassword = await bcrypt.compare(password, user?.password);
     if (!isValidPassword) {
