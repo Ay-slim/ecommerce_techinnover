@@ -7,7 +7,10 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('USER_MODEL') private readonly userModel: Model<User>) {}
+  constructor(
+    @Inject('USER_MODEL')
+    private readonly userModel: Model<User>
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const {
@@ -26,6 +29,10 @@ export class UsersService {
     return createdUser;
   }
 
+  async banOrUnban(_id: string, updateUserDto: {banned: boolean}): Promise<User> {
+    return this.userModel.findByIdAndUpdate(_id, updateUserDto,);
+  }
+
   async findAll(
     paginationDto: PaginationDto,
     filter: {
@@ -36,7 +43,7 @@ export class UsersService {
       page, limit
     } = paginationDto;
     const startIdx = (page - 1) * limit;
-    return this.userModel.find(filter).skip(startIdx).limit(limit);
+    return this.userModel.find(filter, "name email _id role banned").skip(startIdx).limit(limit);
   }
 
   async findByEmail(email: string): Promise<User> {
