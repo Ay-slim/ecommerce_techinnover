@@ -14,10 +14,12 @@ export class AuthService {
   ) {}
 
   async signToken(tokenParams: UserAuthDto, secret: string): Promise<string> {
-    const { email, name, _id, expiry } = tokenParams;
+    const { email, name, _id, expiry, role, banned } = tokenParams;
     const token = await this.jwtService.signAsync(
       {
         email,
+        role,
+        banned,
         name,
         _id,
       },

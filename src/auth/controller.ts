@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Res, Get } from '@nestjs/common';
 import { Response } from 'express';
-import { Public } from '../utils/public_routes';
+import { Public } from '../utils/publicRoutes';
 import { AuthService } from './service';
 import { LoginUserDto, RegisterUserDto } from './types';
 
@@ -49,14 +49,23 @@ export class AuthController {
       access_token,
       refresh_token,
     });
-    return userDetails;
+    return {
+      data: userDetails,
+      message: "Logged in successfully",
+      success: true,
+      statusCode: 201,
+    };
+    
   }
 
   @Get('logout')
   async logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('tokens');
     return {
-      message: 'Logged out successfully',
+      data: null,
+      message: "Logged successfully",
+      success: true,
+      statusCode: 200,
     };
   }
 }
