@@ -9,7 +9,7 @@ import { Request } from 'express';
 import { AuthService } from './service';
 import { UserAuthDto } from './types';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '../utils/public_routes';
+import { IS_PUBLIC_KEY } from '../utils/publicRoutes';
 import { ACCESS_DENIED_ERROR_MESSAGE } from 'src/utils/constants';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class AuthGuard implements CanActivate {
       }
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = userData;
+      request["info"] = userData;
       return true;
     } catch {}
     try {
@@ -60,7 +60,7 @@ export class AuthGuard implements CanActivate {
       }
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = userData;
+      request["info"] = userData;
       const {
         access_token: new_access_token,
         refresh_token: new_refresh_token
