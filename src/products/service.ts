@@ -15,6 +15,7 @@ export class ProductsService {
       qty,
       price,
       user_id,
+      media_urls,
     } = createProductDto;
     return this.productModel.create({
       name,
@@ -22,6 +23,7 @@ export class ProductsService {
       qty,
       price,
       user_id,
+      media_urls,
     });
   }
 
@@ -39,7 +41,11 @@ export class ProductsService {
     return this.productModel.find(filter, "name description qty price _id media_urls").skip(startIdx).limit(limit);
   }
 
-  async update(_id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+  async userUpdate(filter: {_id: string; user_id: string}, updateProductDto: UpdateProductDto): Promise<Product> {
+    return this.productModel.findOneAndUpdate(filter, updateProductDto);
+  }
+
+  async approveOrReject(_id: string, updateProductDto: { approved?: boolean }): Promise<Product> {
     return this.productModel.findByIdAndUpdate(_id, updateProductDto);
   }
 
