@@ -1,11 +1,10 @@
-import { Controller, Post, Body, Req, UseGuards, Patch, BadRequestException, Delete, Param, InternalServerErrorException, Get } from '@nestjs/common';
+import { Controller, Post, Req, UseGuards, Patch, BadRequestException, Delete, Get } from '@nestjs/common';
 import { Request } from 'express';
 import { ProductsService } from 'src/products/service';
 import { UnbannedUserGuard } from './guard';
-import { UpdateProductDto } from 'src/products/types';
-import { successResponse } from 'src/utils/formatResponses';
+import { failureResponse, successResponse } from 'src/utils/formatResponses';
 import { ControllerReturnType } from 'src/utils/types';
-import { DEFAULT_FETCH_LIMIT, INTERNAL_SERVER_ERROR_MESSAGE } from 'src/utils/constants';
+import { DEFAULT_FETCH_LIMIT } from 'src/utils/constants';
 
 @Controller('users')
 export class UsersController {
@@ -42,11 +41,7 @@ export class UsersController {
       return successResponse(data, "Product created", 201, true);
     } catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
   }
 
@@ -68,33 +63,27 @@ export class UsersController {
       return successResponse(data, "Products fetched", 200, true);
     } catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
   }
 
   @UseGuards(UnbannedUserGuard)
   @Patch('product')
-  async updateProduct(@Body() updateProductDto: UpdateProductDto & {_id: string}): Promise<ControllerReturnType> {
+  async updateProduct(@Req() request: Request): Promise<ControllerReturnType> {
     try {
+      const updateProductDto = request.body;
       const { _id } = updateProductDto;
+      const { _id: user_id } = request["info"]
       delete updateProductDto["_id"];
       delete updateProductDto["approved"];
-      const data = await this.productsService.update(_id, updateProductDto);
+      const data = await this.productsService.userUpdate({_id, user_id}, updateProductDto);
       if (!data) {
         throw new BadRequestException("Error: Product not found");
       }
       return successResponse(data, "Product updated", 201, true);
     } catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
   }
 
@@ -110,11 +99,7 @@ export class UsersController {
       return successResponse(data, "Product deleted", 201, true);
     }  catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
   }
 }
