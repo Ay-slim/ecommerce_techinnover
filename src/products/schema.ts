@@ -7,7 +7,7 @@ export const ProductSchema = new mongoose.Schema({
   media_urls: [String],
   approved: {
     type: Boolean,
-    default: false,
+    default: null,
   },
   user_id: mongoose.Types.ObjectId,
 });
