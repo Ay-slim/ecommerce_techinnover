@@ -1,9 +1,9 @@
-import { Body, Controller, Post, Res, Get, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Body, Controller, Post, Res, Get } from '@nestjs/common';
 import { Response } from 'express';
 import { Public } from '../utils/publicRoutes';
 import { AuthService } from './service';
 import { LoginUserDto, RegisterUserDto } from './types';
-import { INTERNAL_SERVER_ERROR_MESSAGE } from 'src/utils/constants';
+import { failureResponse, successResponse } from 'src/utils/formatResponses';
 
 @Controller('auth')
 export class AuthController {
@@ -31,19 +31,10 @@ export class AuthController {
         access_token,
         refresh_token,
       });
-      return {
-        data: userDetails,
-        message: "User created successfully",
-        success: true,
-        statusCode: 201,
-      };
+      successResponse(userDetails, "User created", 201, true);
     } catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
   }
 
@@ -60,19 +51,10 @@ export class AuthController {
         access_token,
         refresh_token,
       });
-      return {
-        data: userDetails,
-        message: "Logged in successfully",
-        success: true,
-        statusCode: 201,
-      };
+      return successResponse(userDetails, "Logged in", 201, true)
     } catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
     
   }
@@ -81,19 +63,10 @@ export class AuthController {
   async logout(@Res({ passthrough: true }) res: Response) {
     try {
       res.clearCookie('tokens');
-      return {
-        data: null,
-        message: "Logged successfully",
-        success: true,
-        statusCode: 200,
-      };
+      return successResponse(null, "Logged out", 200, true);
     } catch (e) {
       console.log(e);
-      if (e?.message?.startsWith("Error: ")) {
-        throw new BadRequestException(e?.message);
-      } else {
-        throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
-      }
+      failureResponse(e);
     }
   }
 }
