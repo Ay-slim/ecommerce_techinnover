@@ -39,7 +39,7 @@ export class AdminController {
         email: z.string(),
         password: z.string(),
       });
-      zodRequestValidation(validator, createUserDto)
+      zodRequestValidation(validator, createUserDto);
       const {
         name,
         email,
