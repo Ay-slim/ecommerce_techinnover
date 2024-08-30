@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthTokenDto, RegisterUserDto, UserAuthDto } from './types';
 import { LoginUserDto } from './types';
 import { UsersService } from '../users/service';
-import { BANNED_USER_ERROR_MESSAGE, LOGIN_ERROR_MESSAGE } from 'src/utils/constants';
+import { ALREADY_EXISTS_ERROR_MESSAGE, BANNED_USER_ERROR_MESSAGE, LOGIN_ERROR_MESSAGE } from 'src/utils/constants';
 
 @Injectable()
 export class AuthService {
@@ -73,7 +73,7 @@ export class AuthService {
     const { name, email, password } = RegisterUserDto;
     const existingUser = await this.userService.findByEmail(email);
     if (existingUser) {
-      throw new BadRequestException('User exists');
+      throw new BadRequestException(ALREADY_EXISTS_ERROR_MESSAGE);
     }
     const userDetails = await this.userService.create({
       name,
