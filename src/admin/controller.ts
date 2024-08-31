@@ -21,7 +21,7 @@ import { failureResponse, successResponse } from "src/utils/formatResponses";
 import { ControllerReturnType } from "src/utils/types";
 import { z } from "zod";
 import { zodRequestValidation } from "src/utils/zodValidation";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 // import { Public } from 'src/utils/publicRoutes';
 // import { AdminService } from './service';
 
@@ -110,32 +110,34 @@ export class AdminController {
   @ApiOperation({
     summary:
       "Fetches all users, filtering using the filter param. Request query parameters: (page, limit, filter (enum: banned | active | all)))",
-    parameters: [
-      {
-        name: "page",
-        in: "query",
-        schema: {
-          type: "integer",
-        },
-        example: "1",
-      },
-      {
-        name: "limit",
-        in: "query",
-        schema: {
-          type: "integer",
-        },
-        example: "20",
-      },
-      {
-        name: "filter",
-        in: "query",
-        schema: {
-          type: "string",
-        },
-        example: "active",
-      },
-    ],
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    schema: {
+      type: "integer",
+      example: 1,
+    },
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of results per page",
+    schema: {
+      type: "integer",
+      example: 20,
+    },
+  })
+  @ApiQuery({
+    name: "filter",
+    required: false,
+    description: "Filter users by status (enum: banned, active, all)",
+    schema: {
+      type: "string",
+      enum: ["banned", "active", "all"],
+      example: "active",
+    },
   })
   @ApiResponse({
     status: 200,
@@ -231,6 +233,25 @@ export class AdminController {
       },
     },
   })
+  @ApiQuery({
+    name: "_id",
+    required: true,
+    description: "Id of the user to ban or unban",
+    schema: {
+      type: "string",
+      example: "66d20e32c05a0ece91b3ec1c",
+    },
+  })
+  @ApiQuery({
+    name: "decision",
+    required: true,
+    description: "Decide whether to ban or unban a user (enum: ban, unban)",
+    schema: {
+      type: "string",
+      enum: ["ban", "unban"],
+      example: "ban",
+    },
+  })
   @ApiResponse({
     status: 201,
     description: "User banned",
@@ -294,33 +315,36 @@ export class AdminController {
   @Get("products")
   @ApiOperation({
     summary:
-      "Fetches all products, filtering using the filter param Request query parameters: (page, limit, filter (enum: approved | rejected | pending))",
-    parameters: [
-      {
-        name: "page",
-        in: "query",
-        schema: {
-          type: "integer",
-        },
-        example: "1",
-      },
-      {
-        name: "limit",
-        in: "query",
-        schema: {
-          type: "integer",
-        },
-        example: "20",
-      },
-      {
-        name: "filter",
-        in: "query",
-        schema: {
-          type: "string",
-        },
-        example: "approved",
-      },
-    ],
+      "Fetches all products, filtering using the filter param Request query parameters: (page, limit, filter (enum: approved | rejected | pending | all))",
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    schema: {
+      type: "integer",
+      example: 1,
+    },
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of results per page",
+    schema: {
+      type: "integer",
+      example: 20,
+    },
+  })
+  @ApiQuery({
+    name: "filter",
+    required: false,
+    description:
+      "Filter products by status (enum: pending, approved, rejected, all)",
+    schema: {
+      type: "string",
+      enum: ["pending", "approved", "rejected", "all"],
+      example: "active",
+    },
   })
   @ApiResponse({
     status: 200,
@@ -401,7 +425,7 @@ export class AdminController {
   @Patch("product")
   @ApiOperation({
     summary:
-      "Approve or reject a product. Query parameters _id (d of product to approve or reject) and decision (enum: ['approve', 'reject'] are required",
+      "Approve or reject a product. Query parameters _id (id of the product to approve or reject) and decision (enum: ['approve', 'reject'] are required",
     requestBody: {
       content: {
         "application/json": {
@@ -416,9 +440,29 @@ export class AdminController {
       },
     },
   })
+  @ApiQuery({
+    name: "_id",
+    required: true,
+    description: "Id of the product to approve or reject",
+    schema: {
+      type: "string",
+      example: "66d20e32c05a0ece91b3ec1c",
+    },
+  })
+  @ApiQuery({
+    name: "decision",
+    required: true,
+    description:
+      "Decide whether to approve or reject a product (enum: approve | reject)",
+    schema: {
+      type: "string",
+      enum: ["approve", "reject"],
+      example: "approve",
+    },
+  })
   @ApiResponse({
     status: 201,
-    description: "User banned",
+    description: "Product approved",
     schema: {
       type: "object",
     },
