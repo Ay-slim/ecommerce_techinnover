@@ -49,7 +49,10 @@ export class ProductsService {
     return this.productModel.findByIdAndUpdate(_id, updateProductDto);
   }
 
-  async delete(_id: string): Promise<Product> {
-    return this.productModel.findByIdAndDelete(_id);
+  async delete(_id: string, user_id: string): Promise<Product> {
+    return this.productModel.findOneAndDelete({
+      _id,
+      user_id,
+    });
   }
 }
