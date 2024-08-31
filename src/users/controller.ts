@@ -16,7 +16,13 @@ import { ControllerReturnType } from "src/utils/types";
 import { DEFAULT_FETCH_LIMIT } from "src/utils/constants";
 import { z } from "zod";
 import { zodRequestValidation } from "src/utils/zodValidation";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 @ApiTags("user")
 @Controller("user")
@@ -117,24 +123,24 @@ export class UsersController {
   @ApiOperation({
     summary:
       "Fetches all of this user's products. Request query parameters: (page, limit)",
-    parameters: [
-      {
-        name: "page",
-        in: "query",
-        schema: {
-          type: "integer",
-        },
-        example: "1",
-      },
-      {
-        name: "limit",
-        in: "query",
-        schema: {
-          type: "integer",
-        },
-        example: "20",
-      },
-    ],
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    schema: {
+      type: "integer",
+      example: 1,
+    },
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of results per page",
+    schema: {
+      type: "integer",
+      example: 20,
+    },
   })
   @ApiResponse({
     status: 200,
@@ -279,6 +285,15 @@ export class UsersController {
   @UseGuards(UnbannedUserGuard)
   @Delete("product/:_id")
   @ApiOperation({ summary: "Deletes a product. Product _id is required" })
+  @ApiParam({
+    name: "_id",
+    required: true,
+    description: "Id of the product to delete",
+    schema: {
+      type: "string",
+      example: "66d20e32c05a0ece91b3ec1c",
+    },
+  })
   @ApiResponse({
     status: 201,
     description: "Product deleted",
