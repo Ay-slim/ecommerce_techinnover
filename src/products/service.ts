@@ -3,7 +3,7 @@ import { Model } from "mongoose";
 import { CreateProductDto, UpdateProductDto } from "./types";
 import { Product } from "./interface";
 import { PaginationDto } from "src/utils/types";
-import { PaginatedProducts } from "src/users/types";
+import { PaginatedProducts } from "./types";
 
 @Injectable()
 export class ProductsService {

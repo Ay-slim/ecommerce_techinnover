@@ -1,3 +1,5 @@
+import { Product } from "./interface";
+
 export type CreateProductDto = {
   name: string;
   description: string;
@@ -13,4 +15,9 @@ export type UpdateProductDto = {
   qty?: number;
   price?: number;
   media_urls?: string[];
+};
+
+export type PaginatedProducts = {
+  products: Product[];
+  pages: number;
 };
