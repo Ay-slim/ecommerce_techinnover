@@ -1,4 +1,3 @@
-import { Product } from "src/products/interface";
 import { User } from "./interface";
 
 export type CreateUserDto = {
