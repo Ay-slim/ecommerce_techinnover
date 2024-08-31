@@ -149,32 +149,30 @@ export class UsersController {
       type: "object",
     },
     example: {
-      data: [
-        {
-          _id: "66d20ec0d9ba094b905526ae",
-          name: "Gamer console",
-          qty: 50,
-          price: 500000,
-          media_urls: [],
-          approved: true,
-        },
-        {
-          _id: "66d20f1ed9ba094b905526b0",
-          name: "Macbooks",
-          qty: 500,
-          price: 3000,
-          media_urls: [],
-          approved: null,
-        },
-        {
-          _id: "66d20f7ef83432c824297cc4",
-          name: "Glocks",
-          qty: 260,
-          price: 2000,
-          media_urls: ["xmac.png", "madarista.d.jpeg"],
-          approved: null,
-        },
-      ],
+      data: {
+        products: [
+          {
+            _id: "66d20f1ed9ba094b905526b0",
+            name: "Macbooks",
+            qty: 500,
+            price: 3000,
+            media_urls: [],
+            approved: false,
+          },
+          {
+            _id: "66d253a1d643efc7b5382337",
+            name: "All is well",
+            qty: 50,
+            price: 20000,
+            media_urls: ["first.png"],
+            approved: null,
+          },
+        ],
+        pages: 2,
+      },
+      message: "Products fetched",
+      statusCode: 200,
+      success: true,
     },
   })
   @ApiResponse({ status: 403, description: "Forbidden." })
