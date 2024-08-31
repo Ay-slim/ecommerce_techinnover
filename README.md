@@ -33,10 +33,8 @@ This is the backend for a basic ecommerce app in nest.js with the following feat
 ## API documentation
 
 - After starting the app, visit http://localhost:6969/api to view the docs and endpoint specifications
-
-  <img width="1433" alt="Screenshot 2024-08-31 at 6 05 25 PM" src="https://github.com/user-attachments/assets/806ace84-9690-4456-ae64-560d55411389">
-  <img width="1428" alt="Screenshot 2024-08-31 at 6 09 58 PM" src="https://github.com/user-attachments/assets/3c682282-4a4b-4c95-9017-dc23f8541e73">
-
+  <img width="1424" alt="Screenshot 2024-08-31 at 9 38 47 PM" src="https://github.com/user-attachments/assets/86bb477d-2b0d-4d98-8296-28c2096eea01">
+  <img width="1430" alt="Screenshot 2024-08-31 at 9 39 00 PM" src="https://github.com/user-attachments/assets/6eeecf09-9aa9-4a34-9e3a-2c74f4bd5f48">
 
 ## App functionalities
 
