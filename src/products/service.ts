@@ -42,7 +42,9 @@ export class ProductsService {
     filter: { _id: string; user_id: string },
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
-    return this.productModel.findOneAndUpdate(filter, updateProductDto);
+    return this.productModel.findOneAndUpdate(filter, updateProductDto, {
+      returnOriginal: false,
+    });
   }
 
   async approveOrReject(
