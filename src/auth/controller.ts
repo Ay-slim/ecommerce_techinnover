@@ -6,13 +6,43 @@ import { LoginUserDto, RegisterUserDto } from './types';
 import { failureResponse, successResponse } from 'src/utils/formatResponses';
 import { z } from 'zod';
 import { zodRequestValidation } from 'src/utils/zodValidation';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
   @Post('register')
+  @ApiOperation({ summary: 'Creates a user account',
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "example": {
+              "name": "Already",
+              "email": "already@user.com",
+              "password": "ayo"
+            }
+          }
+        }
+      }
+    } })
+  @ApiResponse({ status: 201, description: 'Created successfully.', schema : {
+                  type: "object"
+                },example: {
+                    data: {
+                      "name": "Already",
+                      "email": "already@user.com",
+                      "_id": "66d24f57e6443eb007d0e18c",
+                      "banned": false,
+                      "role": "user"
+                    } }})
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 400, description: 'Error: Account already exists' })
+  @ApiResponse({ status: 500, description: 'Something went wrong' })
   async register(
     @Body() createUserDto: RegisterUserDto,
     @Res({ passthrough: true }) res?: Response,
@@ -47,6 +77,34 @@ export class AuthController {
 
   @Public()
   @Post('login')
+  @ApiOperation({ summary: 'Logs a user or admin inot the system',
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "example": {
+              "email": "already@user.com",
+              "password": "ayo"
+            }
+          }
+        }
+      }
+    } })
+  @ApiResponse({ status: 201, description: 'Logged in.', schema : {
+                  type: "object"
+                },example: {
+                    data: {
+                      "name": "Already",
+                      "email": "already@user.com",
+                      "_id": "66d24f57e6443eb007d0e18c",
+                      "banned": false,
+                      "role": "user"
+                    } }})
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 400, description: 'Error: Invalid username or password' })
+  @ApiResponse({ status: 422, description: 'Unprocessable Entity. Failed because the required password field was missing' })
+  @ApiResponse({ status: 500, description: 'Something went wrong' })
   async login(
     @Body() loginUserDto: LoginUserDto,
     @Res({ passthrough: true }) res?: Response,
@@ -71,6 +129,17 @@ export class AuthController {
   }
 
   @Get('logout')
+  @ApiOperation({ summary: 'Logs a user or admin out of the system',})
+  @ApiResponse({ status: 200, description: 'Logged out', schema : {
+                  type: "object"
+                },example: {
+                  "data": null,
+                  "message": "Logged out",
+                  "statusCode": 200,
+                  "success": true
+                 }})
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 401, description: 'Error: Access denied' })
   async logout(@Res({ passthrough: true }) res: Response) {
     try {
       res.clearCookie('tokens');
