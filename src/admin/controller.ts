@@ -108,7 +108,7 @@ export class AdminController {
   @UseGuards(AdminGuard)
   @Get("users")
   @ApiOperation({
-    summary: "Fetches all users, filtering using the filter param",
+    summary: "Fetches all users, filtering using the filter param. Request query parameters: (page, limit, filter (enum: banned | active | all)))",
     parameters: [
       {
         name: "page",
@@ -291,7 +291,7 @@ export class AdminController {
   @UseGuards(AdminGuard)
   @Get("products")
   @ApiOperation({
-    summary: "Fetches all products, filtering using the filter param",
+    summary: "Fetches all products, filtering using the filter param Request query parameters: (page, limit, filter (enum: approved | rejected | pending))",
     parameters: [
       {
         name: "page",

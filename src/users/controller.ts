@@ -115,7 +115,7 @@ export class UsersController {
   @UseGuards(UnbannedUserGuard)
   @Get("products")
   @ApiOperation({
-    summary: "Fetches all of this user's products",
+    summary: "Fetches all of this user's products. Request query parameters: (page, limit)",
     parameters: [
       {
         name: "page",

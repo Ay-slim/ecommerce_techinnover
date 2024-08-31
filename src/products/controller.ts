@@ -18,7 +18,7 @@ export class ProductsController {
   @Get()
   @ApiOperation(
     {
-      summary: "Fetches all approved products",
+      summary: "Fetches all approved products. Request query parameters: (page, limit)",
       parameters: [
         {
           name: "page",
