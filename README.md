@@ -82,7 +82,7 @@ All endpoint request payloads are validated with the appropriate Zod schema
 - products
   - Product Db schema: holds product details and a reference to the user who created them
   - Services: Implements CRUD operations on the products db
-  - Controller: 
+  - Controller:
     - Approved products endpoint accessible to non authenticated users
     - Module: Exposes the DB and services to the apps app.module file to make them usable across other directories
 - auth
@@ -105,9 +105,11 @@ All endpoint request payloads are validated with the appropriate Zod schema
 - Indexed the email field on the user db to ensure that login and other endpoints that do user db looks up by email do not respond slower as the system gets more users.
 
 ## Notes
+
 - Users are logged in automatically after registration due to the basic nature of the app. This will be disabled for an actual production ecommerce app where the email or phone number needs to be verified before proceeding.
 - Console.logs() are used to indicate parts of the system where logs will be sent to a log monitoring system in production to properly track reasons for failures.
 - Assumption: It is not permitted for a registered admin to also sign up as a user and vice-versa.
 
 ## Challenge
+
 - Request parameters not showing up in swagger docs even after specifying them with the @ApiOperation() decorator
