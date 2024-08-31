@@ -1,5 +1,5 @@
 import { Controller, Get, Req } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
 import { ProductsService } from "src/products/service";
 import { DEFAULT_FETCH_LIMIT } from "src/utils/constants";
@@ -16,33 +16,28 @@ export class ProductsController {
 
   @Public()
   @Get()
-  @ApiOperation(
-    {
-      summary:
-        "Fetches all approved products. Request query parameters: (page, limit)",
-      parameters: [
-        {
-          name: "page",
-          in: "query",
-          schema: {
-            type: "integer",
-          },
-          required: true,
-          example: "1",
-        },
-        {
-          name: "limit",
-          in: "query",
-          schema: {
-            type: "integer",
-          },
-          required: true,
-          example: "20",
-        },
-      ],
+  @ApiOperation({
+    summary:
+      "Fetches all approved products. Request query parameters: (page, limit)",
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    schema: {
+      type: "integer",
+      example: 1,
     },
-    { overrideExisting: true },
-  )
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of results per page",
+    schema: {
+      type: "integer",
+      example: 20,
+    },
+  })
   @ApiResponse({
     status: 200,
     description: "Fetched.",
