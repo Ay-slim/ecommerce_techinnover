@@ -109,7 +109,3 @@ All endpoint request payloads are validated with the appropriate Zod schema
 - Users are logged in automatically after registration due to the basic nature of the app. This will be disabled for an actual production ecommerce app where the email or phone number needs to be verified before proceeding.
 - Console.logs() are used to indicate parts of the system where logs will be sent to a log monitoring system in production to properly track reasons for failures.
 - Assumption: It is not permitted for a registered admin to also sign up as a user and vice-versa.
-
-## Challenge
-
-- Request parameters not showing up in swagger docs even after specifying them with the @ApiOperation() decorator
