@@ -36,13 +36,18 @@ export class UsersService {
     filter: {
       banned?: boolean;
     },
-  ): Promise<User[]> {
+  ): Promise<{users: User[], pages: number}> {
     const { page, limit } = paginationDto;
     const startIdx = (page - 1) * limit;
-    return this.userModel
+    const users = await this.userModel
       .find(filter, "name email _id role banned")
       .skip(startIdx)
       .limit(limit);
+    const count = await this.userModel.countDocuments(filter);
+    return {
+      users,
+      pages: Math.ceil(count / limit)
+    }
   }
 
   async findByEmail(email: string): Promise<User> {

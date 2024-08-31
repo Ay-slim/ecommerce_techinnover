@@ -3,6 +3,7 @@ import { Model } from "mongoose";
 import { CreateProductDto, UpdateProductDto } from "./types";
 import { Product } from "./interface";
 import { PaginationDto } from "src/utils/types";
+import { PaginatedProducts } from "src/users/types";
 
 @Injectable()
 export class ProductsService {
@@ -29,13 +30,15 @@ export class ProductsService {
       approved?: boolean;
       user_id?: string;
     },
-  ): Promise<Product[]> {
+  ): Promise<PaginatedProducts> {
     const { page, limit } = paginationDto;
     const startIdx = (page - 1) * limit;
-    return this.productModel
+    const products = await this.productModel
       .find(filter, "name description qty price _id media_urls approved")
       .skip(startIdx)
       .limit(limit);
+    const count = await this.productModel.countDocuments(filter);
+    return {products, pages: Math.ceil(count/limit)}
   }
 
   async userUpdate(
