@@ -9,7 +9,7 @@ import { ControllerReturnType } from 'src/utils/types';
 import { zodRequestValidation } from 'src/utils/zodValidation';
 import { z } from 'zod';
 
-@ApiTags('users')
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(
@@ -19,24 +19,26 @@ export class ProductsController {
   @Public()
   @Get()
   @ApiOperation({summary: "Fetches all approved products",
-    "parameters": [
+    parameters: [
       {
-        "name": "page",
-        "in": "query",
-        "schema": {
-          "type": "integer"
+        name: "page",
+        in: "query",
+        schema: {
+          type: "integer"
         },
-        "example": "1"
+        required: true,
+        example: "1"
       },
       {
-        "name": "limit",
-        "in": "query",
-        "schema": {
-          "type": "integer"
+        name: "limit",
+        in: "query",
+        schema: {
+          type: "integer"
         },
-        "example": "20"
+        required: true,
+        example: "20"
       },
-    ], })
+    ], }, {overrideExisting: true})
   @ApiResponse({ status: 200, description: 'Fetched.', schema : {
                 type: "object"
               },example: {

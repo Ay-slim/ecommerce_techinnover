@@ -9,8 +9,8 @@ import { z } from 'zod';
 import { zodRequestValidation } from 'src/utils/zodValidation';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('users')
-@Controller('users')
+@ApiTags('user')
+@Controller('user')
 export class UsersController {
   constructor(
     private readonly productsService: ProductsService
