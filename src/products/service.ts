@@ -38,7 +38,7 @@ export class ProductsService {
       .skip(startIdx)
       .limit(limit);
     const count = await this.productModel.countDocuments(filter);
-    return {products, pages: Math.ceil(count/limit)}
+    return { products, pages: Math.ceil(count / limit) };
   }
 
   async userUpdate(
