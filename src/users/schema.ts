@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 
 export const UserSchema = new mongoose.Schema({
   name: String,
@@ -9,7 +9,7 @@ export const UserSchema = new mongoose.Schema({
   password: String,
   role: {
     type: String,
-    enum: ['superadmin', 'admin', 'user']
+    enum: ["superadmin", "admin", "user"],
   },
   banned: {
     type: Boolean,

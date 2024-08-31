@@ -3,14 +3,14 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
-import { AuthService } from './service';
-import { UserAuthDto } from './types';
-import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '../utils/publicRoutes';
-import { ACCESS_DENIED_ERROR_MESSAGE } from 'src/utils/constants';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { Request } from "express";
+import { AuthService } from "./service";
+import { UserAuthDto } from "./types";
+import { Reflector } from "@nestjs/core";
+import { IS_PUBLIC_KEY } from "../utils/publicRoutes";
+import { ACCESS_DENIED_ERROR_MESSAGE } from "src/utils/constants";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -63,14 +63,14 @@ export class AuthGuard implements CanActivate {
       request["info"] = userData;
       const {
         access_token: new_access_token,
-        refresh_token: new_refresh_token
+        refresh_token: new_refresh_token,
       } = await this.authService.generateTokens(userData);
-      response.cookie('tokens', {
+      response.cookie("tokens", {
         access_token: new_access_token,
         refresh_token: new_refresh_token,
       });
     } catch (e) {
-      console.log(e, 'Error in auth guard')
+      console.log(e, "Error in auth guard");
       throw new UnauthorizedException(ACCESS_DENIED_ERROR_MESSAGE);
     }
     return true;

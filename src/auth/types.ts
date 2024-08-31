@@ -10,16 +10,16 @@ export type UserAuthDto = {
 export type LoginUserDto = {
   email: string;
   password: string;
-}
+};
 
 export type RegisterUserDto = {
-  name: string
+  name: string;
 } & LoginUserDto;
 
-export type AuthTokenDto ={
+export type AuthTokenDto = {
   name: string;
   email: string;
   _id: string;
   banned: boolean;
-  role: string
-}
+  role: string;
+};

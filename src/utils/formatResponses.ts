@@ -4,7 +4,7 @@ import { User } from "src/users/interface";
 import { INTERNAL_SERVER_ERROR_MESSAGE } from "./constants";
 
 export const successResponse = (
-  data: User | User[] | Product | Product[] | {name: string},
+  data: User | User[] | Product | Product[] | { name: string },
   message: string,
   statusCode: HttpStatus,
   success: boolean,
@@ -13,19 +13,15 @@ export const successResponse = (
     data,
     message,
     statusCode,
-    success
-  }
-}
+    success,
+  };
+};
 
-export const failureResponse = (
-  e: {
-    message: string;
-  },
-) => {
+export const failureResponse = (e: { message: string }) => {
   console.log(e);
   if (e?.message?.startsWith("Error: ")) {
     throw e;
   } else {
     throw new InternalServerErrorException(INTERNAL_SERVER_ERROR_MESSAGE);
   }
-}
+};

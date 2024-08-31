@@ -1,10 +1,19 @@
-import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { AuthTokenDto, RegisterUserDto, UserAuthDto } from './types';
-import { LoginUserDto } from './types';
-import { UsersService } from '../users/service';
-import { ALREADY_EXISTS_ERROR_MESSAGE, BANNED_USER_ERROR_MESSAGE, LOGIN_ERROR_MESSAGE } from 'src/utils/constants';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
+import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
+import { AuthTokenDto, RegisterUserDto, UserAuthDto } from "./types";
+import { LoginUserDto } from "./types";
+import { UsersService } from "../users/service";
+import {
+  ALREADY_EXISTS_ERROR_MESSAGE,
+  BANNED_USER_ERROR_MESSAGE,
+  LOGIN_ERROR_MESSAGE,
+} from "src/utils/constants";
 
 @Injectable()
 export class AuthService {
@@ -28,34 +37,40 @@ export class AuthService {
     return token;
   }
 
-  async generateTokens(userDetails: AuthTokenDto): Promise<{access_token: string, refresh_token: string}> {
-    const access_token = await this.signToken({
-      ...userDetails,
-      expiry: process.env.ACCESS_TOKEN_EXPIRY,
-    }, process.env.ACCESS_TOKEN_SECRET);
-    const refresh_token = await this.signToken({
-      ...userDetails,
-      expiry: process.env.REFRESH_TOKEN_EXPIRY,
-    }, process.env.REFRESH_TOKEN_SECRET);
-    return {access_token, refresh_token}
+  async generateTokens(
+    userDetails: AuthTokenDto,
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    const access_token = await this.signToken(
+      {
+        ...userDetails,
+        expiry: process.env.ACCESS_TOKEN_EXPIRY,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+    );
+    const refresh_token = await this.signToken(
+      {
+        ...userDetails,
+        expiry: process.env.REFRESH_TOKEN_EXPIRY,
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+    );
+    return { access_token, refresh_token };
   }
 
-  async login(
-    loginUserDto: LoginUserDto,
-  ): Promise<AuthTokenDto> {
+  async login(loginUserDto: LoginUserDto): Promise<AuthTokenDto> {
     const { email, password } = loginUserDto;
     const user = await this.userService.findByEmail(email);
     if (!user) {
-      console.log('User does not exist');
+      console.log("User does not exist");
       throw new UnauthorizedException(LOGIN_ERROR_MESSAGE);
     }
     if (user.banned) {
-      console.log('Banned user');
+      console.log("Banned user");
       throw new ForbiddenException(BANNED_USER_ERROR_MESSAGE);
     }
     const isValidPassword = await bcrypt.compare(password, user?.password);
     if (!isValidPassword) {
-      console.log('Wrong password');
+      console.log("Wrong password");
       throw new UnauthorizedException(LOGIN_ERROR_MESSAGE);
     }
     return {
@@ -67,9 +82,7 @@ export class AuthService {
     };
   }
 
-  async register(
-    RegisterUserDto: RegisterUserDto,
-  ): Promise<AuthTokenDto> {
+  async register(RegisterUserDto: RegisterUserDto): Promise<AuthTokenDto> {
     const { name, email, password } = RegisterUserDto;
     const existingUser = await this.userService.findByEmail(email);
     if (existingUser) {
@@ -79,7 +92,7 @@ export class AuthService {
       name,
       email,
       password,
-      role: 'user',
+      role: "user",
     });
     return {
       name: userDetails.name,

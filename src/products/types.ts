@@ -5,7 +5,7 @@ export type CreateProductDto = {
   price: number;
   user_id: string;
   media_urls?: string[];
-}
+};
 
 export type UpdateProductDto = {
   name?: string;
@@ -13,4 +13,4 @@ export type UpdateProductDto = {
   qty?: number;
   price?: number;
   media_urls?: string[];
-}
+};

@@ -1,9 +1,5 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-} from '@nestjs/common';
-import { UserAuthDto } from '../auth/types';
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { UserAuthDto } from "../auth/types";
 
 @Injectable()
 export class AdminGuard implements CanActivate {
