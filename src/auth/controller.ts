@@ -83,7 +83,7 @@ export class AuthController {
   @Public()
   @Post("login")
   @ApiOperation({
-    summary: "Logs a user or admin inot the system",
+    summary: "Logs a user or admin into the system",
     requestBody: {
       content: {
         "application/json": {
