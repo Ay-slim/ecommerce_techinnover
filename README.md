@@ -67,35 +67,35 @@ All endpoint request payloads are validated with the appropriate Zod schema
 
 ### Directories
 
-- <users>
-  - <User Db schema>: contains both regular users and admins, distinguishing them by a role field with values `user` | `admin` | `superadmin`
-  - <Services>: Implements CRUD operations on the user db
-  - <Controller>: User endpoints
+- users
+  - User Db schema: contains both regular users and admins, distinguishing them by a role field with values `user` | `admin` | `superadmin`
+  - Services: Implements CRUD operations on the user db
+  - Controller: User endpoints
     - product creation
     - product fetch (only those created by self)
     - product update (only those created by self)
     - product deletion (only those created by self)
-  - <Guard>: handles unbanned user access
-  - <Module>: Exposes the DB and services to the apps app.module file to make them usable across other directories
-- <products>
-  - <Product Db schema>: holds product details and a reference to the user who created them
-  - <Services>: Implements CRUD operations on the products db
-  - <Controller>: 
+  - Guard: handles unbanned user access
+  - Module: Exposes the DB and services to the apps app.module file to make them usable across other directories
+- products
+  - Product Db schema: holds product details and a reference to the user who created them
+  - Services: Implements CRUD operations on the products db
+  - Controller: 
     - Approved products endpoint accessible to non authenticated users
-    - <Module>: Exposes the DB and services to the apps app.module file to make them usable across other directories
-- <auth>
+    - Module: Exposes the DB and services to the apps app.module file to make them usable across other directories
+- auth
   - Handles authentication for users and admin
-  - <Controller>: has all the login, register, and logout endpoints
-  - <Guard>: Handles auth guard enforcing valid login tokens
-- <admin>
+  - Controller: has all the login, register, and logout endpoints
+  - Guard: Handles auth guard enforcing valid login tokens
+- admin
   - Contains logic for admin activities
-  - <Controller>: contains the admin creation, user fetch, user banning/unbanning, product approval/rejection
-  - <Guard>: Ensures only admins can access admin endpoints
-- <database>
+  - Controller: contains the admin creation, user fetch, user banning/unbanning, product approval/rejection
+  - Guard: Ensures only admins can access admin endpoints
+- database
   - Database initialization and connection
-- <utils>
+- utils
   - functions and types that are useful across the various directories
-- <app.module>, <main>: App initialization
+- app.module, main: App initialization
 
 ## Performance improvements
 
@@ -105,7 +105,7 @@ All endpoint request payloads are validated with the appropriate Zod schema
 ## Notes
 - Users are logged in automatically after registration due to the basic nature of the app. This will be disabled for an actual production ecommerce app where the email or phone number needs to be verified before proceeding.
 - Console.logs() are used to indicate parts of the system where logs will be sent to a log monitoring system in production to properly track reasons for failures.
-- <Assumption>: It is not permitted for a registered admin to also sign up as a user and vice-versa.
+- Assumption: It is not permitted for a registered admin to also sign up as a user and vice-versa.
 
 ## Challenge
 - Request parameters not showing up in swagger docs even after specifying them with the @ApiOperation() decorator
