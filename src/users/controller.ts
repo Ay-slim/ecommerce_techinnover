@@ -115,7 +115,8 @@ export class UsersController {
   @UseGuards(UnbannedUserGuard)
   @Get("products")
   @ApiOperation({
-    summary: "Fetches all of this user's products. Request query parameters: (page, limit)",
+    summary:
+      "Fetches all of this user's products. Request query parameters: (page, limit)",
     parameters: [
       {
         name: "page",
@@ -178,8 +179,8 @@ export class UsersController {
         JSON.stringify(request.query),
       );
       const validator = z.object({
-        rawPage: z.string(),
-        rawLimit: z.string(),
+        rawPage: z.string().optional(),
+        rawLimit: z.string().optional(),
       });
       zodRequestValidation(validator, {
         rawPage,
@@ -204,7 +205,7 @@ export class UsersController {
   @UseGuards(UnbannedUserGuard)
   @Patch("product")
   @ApiOperation({
-    summary: "Update a product's info",
+    summary: "Update a product's info. _id (product's id) is a required field",
     requestBody: {
       content: {
         "application/json": {
@@ -277,7 +278,7 @@ export class UsersController {
 
   @UseGuards(UnbannedUserGuard)
   @Delete("product/:_id")
-  @ApiOperation({ summary: "Deletes a product" })
+  @ApiOperation({ summary: "Deletes a product. Product _id is required" })
   @ApiResponse({
     status: 201,
     description: "Product deleted",

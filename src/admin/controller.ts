@@ -108,7 +108,8 @@ export class AdminController {
   @UseGuards(AdminGuard)
   @Get("users")
   @ApiOperation({
-    summary: "Fetches all users, filtering using the filter param. Request query parameters: (page, limit, filter (enum: banned | active | all)))",
+    summary:
+      "Fetches all users, filtering using the filter param. Request query parameters: (page, limit, filter (enum: banned | active | all)))",
     parameters: [
       {
         name: "page",
@@ -183,9 +184,9 @@ export class AdminController {
         filter,
       } = JSON.parse(JSON.stringify(request.query));
       const validator = z.object({
-        rawPage: z.string(),
-        rawLimit: z.string(),
-        filter: z.enum(["banned", "active", "all"]),
+        rawPage: z.string().optional(),
+        rawLimit: z.string().optional(),
+        filter: z.enum(["banned", "active", "all"]).optional(),
       });
       zodRequestValidation(validator, {
         rawPage,
@@ -214,7 +215,8 @@ export class AdminController {
   @UseGuards(AdminGuard)
   @Patch("user")
   @ApiOperation({
-    summary: "Ban or unban user",
+    summary:
+      "Ban or unban user. _id (id of user to be banned or unbanned) and decision (enum: ['ban', 'unban']) are required parameters",
     requestBody: {
       content: {
         "application/json": {
@@ -291,7 +293,8 @@ export class AdminController {
   @UseGuards(AdminGuard)
   @Get("products")
   @ApiOperation({
-    summary: "Fetches all products, filtering using the filter param Request query parameters: (page, limit, filter (enum: approved | rejected | pending))",
+    summary:
+      "Fetches all products, filtering using the filter param Request query parameters: (page, limit, filter (enum: approved | rejected | pending))",
     parameters: [
       {
         name: "page",
@@ -364,9 +367,9 @@ export class AdminController {
         filter,
       } = JSON.parse(JSON.stringify(request.query));
       const validator = z.object({
-        rawPage: z.string(),
-        rawLimit: z.string(),
-        filter: z.enum(["pending", "approved", "rejected", "all"]),
+        rawPage: z.string().optional(),
+        rawLimit: z.string().optional(),
+        filter: z.enum(["pending", "approved", "rejected", "all"]).optional(),
       });
       zodRequestValidation(validator, {
         rawPage,
@@ -397,7 +400,8 @@ export class AdminController {
   @UseGuards(AdminGuard)
   @Patch("product")
   @ApiOperation({
-    summary: "Approve or reject a product",
+    summary:
+      "Approve or reject a product. Query parameters _id (d of product to approve or reject) and decision (enum: ['approve', 'reject'] are required",
     requestBody: {
       content: {
         "application/json": {

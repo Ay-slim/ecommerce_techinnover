@@ -18,7 +18,8 @@ export class ProductsController {
   @Get()
   @ApiOperation(
     {
-      summary: "Fetches all approved products. Request query parameters: (page, limit)",
+      summary:
+        "Fetches all approved products. Request query parameters: (page, limit)",
       parameters: [
         {
           name: "page",
@@ -87,8 +88,8 @@ export class ProductsController {
         JSON.stringify(request.query),
       );
       const validator = z.object({
-        rawPage: z.string(),
-        rawLimit: z.string(),
+        rawPage: z.string().optional(),
+        rawLimit: z.string().optional(),
       });
       zodRequestValidation(validator, {
         rawPage,
