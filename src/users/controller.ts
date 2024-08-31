@@ -1,4 +1,4 @@
-import { Controller, Post, Req, UseGuards, Patch, BadRequestException, Delete, Get, Param } from '@nestjs/common';
+import { Controller, Post, Req, UseGuards, Patch, BadRequestException, Delete, Get } from '@nestjs/common';
 import { Request } from 'express';
 import { ProductsService } from 'src/products/service';
 import { UnbannedUserGuard } from './guard';
@@ -98,7 +98,7 @@ export class UsersController {
       });
       zodRequestValidation(validator, updateProductDto);
       const { _id } = updateProductDto;
-      const { _id: user_id } = request["info"]
+      const { _id: user_id } = request["info"];
       delete updateProductDto["_id"];
       delete updateProductDto["approved"];
       const data = await this.productsService.userUpdate({_id, user_id}, updateProductDto);
@@ -113,16 +113,18 @@ export class UsersController {
 
   @UseGuards(UnbannedUserGuard)
   @Delete('product/:_id')
-  async deleteProduct(@Param() deleteProductDto: {_id: string}): Promise<ControllerReturnType> {
+  async deleteProduct(@Req() request: Request): Promise<ControllerReturnType> {
     try {
+      const deleteProductDto = request.params;
       const validator = z.object({
         _id: z.string(),
       });
       zodRequestValidation(validator, deleteProductDto);
       const {_id} = deleteProductDto;
-      const data = await this.productsService.delete(_id as string);
+      const { _id: user_id } = request["info"];
+      const data = await this.productsService.delete(_id as string, user_id);
       if (!data) {
-        throw new BadRequestException("Product not found");
+        throw new BadRequestException("Error: Product not found");
       }
       return successResponse(data, "Product deleted", 201, true);
     }  catch (e) {
