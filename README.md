@@ -11,7 +11,7 @@ This is the backend for a basic ecommerce app in nest.js with the following feat
 - Admin management
   - A superadmin user initially seeded into the database
   - The superadmin (alone) is able to create other admins
-  - Created admins or the user admin are able to login to the system and do the following:
+  - Created admins or the super admin are able to login to the system and do the following:
     - View users and ban users to prevent them from logging in or performing any other actions available to authenticated users
     - Unban users and restore their access to the systm
     - View user created products and approve them for visibility to the public or reject the products, making them visible only to the creator.
